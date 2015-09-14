@@ -1,7 +1,8 @@
-var squabble = require("squabble").createParser(),
+var fs = require("fs"),
+    squabble = require("squabble").createParser(),
     later = require(".."),
     noop = require("../lib/noop"),
-    server,
+    server, port, hosts,
     args,
     opts = {};
 
@@ -22,7 +23,10 @@ squabble.shortOpts().longOpts().stopper()
     .flag("-q", "--quiet")
     .flag("-s", "--silent")
     .flag("-r", "--replay")
-    .option("-p", "--port");
+    .option("-p", "--port")
+    .option("--tls-cert")
+    .option("--tls-key")
+    .option("--tls-ca");
 
 // parse global CLI args
 args = squabble.parse();
@@ -42,6 +46,23 @@ if (args.named["--host"].length > 0) opts.hosts = args.named["--host"];
 if (args.named["--path"].length > 0) opts.paths = args.named["--path"];
 if (args.named["--port"]) opts.port = args.named["--port"];
 
+// validate and apply TLS options
+if (args.named["--tls-cert"]) {
+    if (!args.named["--tls-key"]) {
+        console.error("TLS cert requires key (try --tls-key");
+        process.exit(1);
+    }
+
+    opts.tls = {
+        cert: fs.readFileSync(args.named["--tls-cert"]),
+        key: fs.readFileSync(args.named["--tls-key"])
+    };
+
+    if (args.named["--tls-ca"]) {
+        opts.tls.ca = fs.readFileSync(args.named["--tls-ca"]);
+    }
+}
+
 // create server and log start message
 server = later.createServer(opts);
 console.log("starting server".green);
@@ -59,7 +80,11 @@ server.on("error", function(err) {
 if (args.named["--replay"]) server.replay();
 
 // begin listening on server
-server.listen(opts.port || process.env.LATER_PORT || 2112, function(address) {
-    console.log(("listening on " + address.address + ":" + address.port).blue);
+port = opts.port || process.env.LATER_PORT || 2112;
+hosts = opts.hosts ? opts.hosts : [undefined];
+hosts.forEach(function(host) {
+    server.listen(port, host, function(address) {
+        console.log(("listening on " + address.address + ":" + address.port).blue);
+    });
 });
 

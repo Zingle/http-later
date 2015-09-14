@@ -6,6 +6,7 @@
   "dependencies": {
     "express": "^4",
     "redis": "^1",
+    "es6-promise": "^3",
     "squabble": "^1",
     "propertize": "^2"
   },

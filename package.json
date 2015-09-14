@@ -4,7 +4,8 @@
   "description": "queue HTTP requests and replay them later",
   "main": "index.js",
   "dependencies": {
-    "express": "^4"
+    "express": "^4",
+    "squabble": "^1"
   },
   "scripts": {
     "test": "mocha"

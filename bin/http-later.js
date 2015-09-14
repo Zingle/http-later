@@ -5,6 +5,9 @@ var squabble = require("squabble").createParser(),
     args,
     opts = {};
 
+// ensure color support enabled
+require("colors");
+
 // patch console object
 console.log = noop(console.log).enable();
 console.info = noop(console.info).disable();
@@ -41,12 +44,12 @@ if (args.named["--port"]) opts.port = args.named["--port"];
 
 // create server and log start message
 server = later.createServer(opts);
-console.log("starting server");
+console.log("starting server".green);
 
 // shutdown on server error after logging
 server.on("error", function(err) {
-    console.error(err);
-    console.info("shutting down");
+    console.error(String(err).red);
+    console.info("shutting down".green);
     server.close(function() {
         process.exit(1);
     });
@@ -54,6 +57,6 @@ server.on("error", function(err) {
 
 // begin listening on server
 server.listen(opts.port || process.env.LATER_PORT || 2112, function(address) {
-    console.log("listening on", address.address + ":" + address.port);
+    console.log(("listening on", address.address + ":" + address.port).cyan);
 });
 

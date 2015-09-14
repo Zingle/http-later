@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "queue HTTP requests and replay them later",
   "main": "server.js",
+  "dependencies": {
+    "express": "^4"
+  },
   "scripts": {
     "test": "mocha",
     "start": "node server.js"

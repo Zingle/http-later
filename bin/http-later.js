@@ -60,6 +60,6 @@ if (args.named["--replay"]) server.replay();
 
 // begin listening on server
 server.listen(opts.port || process.env.LATER_PORT || 2112, function(address) {
-    console.log(("listening on " + address.address + ":" + address.port).cyan);
+    console.log(("listening on " + address.address + ":" + address.port).blue);
 });
 

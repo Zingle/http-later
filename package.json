@@ -2,13 +2,12 @@
   "name": "http-later",
   "version": "0.0.1",
   "description": "queue HTTP requests and replay them later",
-  "main": "server.js",
+  "main": "index.js",
   "dependencies": {
     "express": "^4"
   },
   "scripts": {
-    "test": "mocha",
-    "start": "node server.js"
+    "test": "mocha"
   },
   "author": "Richard Remer (reanjr@gmail.com)",
   "license": "proprietary"

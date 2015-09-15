@@ -17,5 +17,5 @@
     "test": "mocha"
   },
   "author": "Richard Remer (reanjr@gmail.com)",
-  "license": "proprietary"
+  "license": "MIT"
 }

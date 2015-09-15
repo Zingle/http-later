@@ -83,6 +83,7 @@ server.on("listening", function(httpServer) {
 // log some other server events
 server.on("replay", function() {console.log("replaying".gray);});
 server.on("drain", function() {console.log("drained".gray);});
+server.on("backoff", function() {console.log("backing off".gray);});
 
 // log responses to incoming requests
 server.on("request", function(res, req) {

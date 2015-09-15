@@ -17,7 +17,7 @@ Usage: http-later [[-v|--verbose], ...] [-q|--quiet|-s|--silent]
 
 accepted options
   The --accepted option expects a comma-delimited string of colon-delimited
-  name:pairs.  The following names are recognized:
+  name:value pairs.  The following names are recognized:
 
   host      host name to listen on
   port      listen port; TLS defaults to 443, otherwise defaults to 80

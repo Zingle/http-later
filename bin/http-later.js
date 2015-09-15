@@ -3,7 +3,8 @@ var squabble = require("squabble").createParser(),
     noop = require("../lib/noop"),
     server, port, hosts,
     args,
-    opts = {};
+    opts = {},
+    storage = {};
 
 // ensure color support enabled
 require("colors");
@@ -22,7 +23,8 @@ squabble.shortOpts().longOpts().stopper()
     .flag("-q", "--quiet")
     .flag("-s", "--silent")
     .flag("-r", "--replay")
-    .option("-T", "--tls-dir");
+    .option("-T", "--tls-dir")
+    .option("-S", "--storage");
 
 // parse global CLI args
 args = squabble.parse();
@@ -39,6 +41,14 @@ if (args.named["--quiet"] || args.named["--silent"]) {
 
 // set options
 if (args.named["--tls-dir"]) opts.tlsDir = args.named["--tls-dir"];
+
+// configure storage
+storage = args.named["--storage"]
+    ? readOpts(args.named["--storage"])
+    : {driver: "redis"};
+storage.module = "http-later-" + storage.driver;
+storage.ctor = require(storage.module);
+opts.storage = new storage.ctor(storage);
 
 // create server
 server = later.createServer(opts);

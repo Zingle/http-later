@@ -8,10 +8,10 @@
     "redis": "^1",
     "es6-promise": "^3",
     "concat-stream": "^1",
-    "retry": "^0.7",
     "request": "^2",
     "squabble": "^1",
-    "propertize": "^2"
+    "propertize": "^2",
+    "http-later-redis": "*"
   },
   "scripts": {
     "test": "mocha"

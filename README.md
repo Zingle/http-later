@@ -30,16 +30,22 @@ accepted options
 
 Examples
 --------
-**Example:** accept secure requests to dev-admin.zingle.me
+**Example:** accept and queue all incoming HTTP requests to /foo/*
 ```sh
-CERT_FILE=zingle.crt
-KEY_FILE=zingle.key
-CA_FILE=zingle-ca.crt
-TLS_OPTS=tls:$CERT_FILE:$KEY_FILE:$CA_FILE
-http-later -vv -T/etc/ssl/private -Ahost:dev-admin.zingle.me,$TLS_OPTS
+http-later -Apath:/foo/
+```
+
+**Example:** accept and queue all secure requests to example.com
+```sh
+http-later -Ahost:example.com,tls:/path/to/cert:/path/to/key:/path/to/ca
+```
+
+**Example:** accept HTTP requests on port 8000
+```sh
+http-later -Aport:8000
 ```
 
 **Example:** replay queued requests
 ```sh
-http-later -vv --replay
+http-later -r
 ```

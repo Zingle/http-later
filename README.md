@@ -32,8 +32,11 @@ Examples
 --------
 **Example:** accept secure requests to dev-admin.zingle.me
 ```sh
-http-later -vv -T/etc/ssl/private \
-    -Ahost:dev-admin.zingle.me,tls:zingle.crt:zingle.key:zingle-ca.crt
+CERT_FILE=zingle.crt
+KEY_FILE=zingle.key
+CA_FILE=zingle-ca.crt
+TLS_OPTS=tls:$CERT_FILE:$KEY_FILE:$CA_FILE
+http-later -vv -T/etc/ssl/private -Ahost:dev-admin.zingle.me,$TLS_OPTS
 ```
 
 **Example:** replay queued requests

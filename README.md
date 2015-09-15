@@ -29,15 +29,13 @@ accept options
 
 Examples
 --------
+**Example:** accept secure requests to dev-admin.zingle.me
 ```sh
-CERT_OPTS=tls:zingle.crt:zingle.key:zingle-ca.crt
-http-later -vv \
-    --tls-dir=/etc/ssl/private \
-    --listen=host:dev-admin.zingle.me,path:/res,$CERT_OPTS \
-    --listen=host:dev-dashboard.zingle.me:path=/service:$CERT_OPTS \
+http-later -vv -T/etc/ssl/private \
+    -Ahost:dev-admin.zingle.me,tls:zingle.crt:zingle.key:zingle-ca.crt
 ```
 
-Replay queued requests.
+**Example:** replay queued requests
 ```sh
 http-later -vv --replay
 ```

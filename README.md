@@ -76,16 +76,16 @@ When requests arrive, Later will check the request against filters, write
 the request to the storage provider, and return a response.  The following
 response codes may be returned.
 
-#### 202 Accepted
+##### 202 Accepted
 The request was accepted and queued for later.
 
-#### 404 Not Found
+##### 404 Not Found
 The request was rejected because of the URL path.
 
-#### 405 Method Not Allowed
+##### 405 Method Not Allowed
 The request was rejected becasue of the HTTP method.
 
-#### 500 Internal Server Error
+##### 500 Internal Server Error
 Something went wrong trying to store the request.
 
 ### Replay
@@ -96,20 +96,20 @@ requests.  The requests will then passed along to their destination.
 The HTTP Later server recognizes a few custom headers which can be used to
 control the replay of requests.  It preserves headers except where noted here.
 
-#### X-Later-Host
+##### X-Later-Host
 Sent by client to override the Host header during replay.  The original Host \
 header will be sent in the X-Later-Server header.
 
-#### X-Later-Key
+##### X-Later-Key
 Sent to the client when a request is accepted.  It uniquely identifies the
 queued request.
 
-#### X-Later-Plain
+##### X-Later-Plain
 By default, HTTP Later will replay all requests over TLS.  The client can send
 this header (with any value) to force HTTP Later to replay the request without
 TLS.
 
-#### X-Later-Server
+##### X-Later-Server
 Sent during replay when the Host header was overwritten using the X-Later-Host
 header.  Contains the original Host header sent by the client.
 

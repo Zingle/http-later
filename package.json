@@ -11,7 +11,8 @@
     "request": "^2",
     "squabble": "^1",
     "propertize": "^2",
-    "http-later-redis": "*"
+    "http-later-redis": "*",
+    "event-emitter-forward": "^1"
   },
   "scripts": {
     "test": "mocha"

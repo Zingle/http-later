@@ -104,14 +104,14 @@ noted here.
 Sent by client to override the Host header during replay.  The original Host
 header will be sent in the X-Later-Server header.
 
-##### X-Later-Key
-Sent to the client when a request is accepted.  It uniquely identifies the
-queued request.
-
-##### X-Later-Plain
+##### X-Later-Insecure
 By default, HTTP Later will replay all requests over TLS.  The client can send
 this header (with any value) to force HTTP Later to replay the request without
 TLS.
+
+##### X-Later-Key
+Sent to the client when a request is accepted.  It uniquely identifies the
+queued request.
 
 ##### X-Later-Server
 Sent during replay when the Host header was overwritten using the X-Later-Host

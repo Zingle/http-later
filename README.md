@@ -91,10 +91,6 @@ be used to configure which methods are allowed.
 ##### 500 Internal Server Error
 Something went wrong trying to record the request.
 
-### Replay
-When replay is enabled, the request queue will be continuously scanned for new
-requests.  The requests will then passed along to their destination.
-
 ### HTTP Later Headers
 The HTTP Later server generates and recognizes a few custom headers which can
 be used to control the replay of requests.  It preserves headers except where
@@ -123,3 +119,53 @@ git clone git@github.com:Zingle/http-later.git
 cd http-later
 npm install -g
 ```
+
+### Replay
+When replay is enabled, the request queue will be continuously scanned for new
+requests.  The requests will then passed along to their destination.
+
+### Storage
+Storage can be customized by writing new storage drivers.  The default storage
+driver is `redis`.  This causes the `http-later` to load the `http-later-redis`
+module, which exports a constructor which is used to create a storage instance.
+The `http-later` server passes any storage options to the constructor as an
+options object.
+
+#### Creating A New Storage Driver
+The following steps should be taken to implement a new storage driver.
+
+ * choose a name for the driver
+ * create new class extending from LaterStorage
+   * call base LaterStorage constructor with `queue` and `unqueue` arguments
+   * `queue(object, function)`
+     * store request object in queue
+     * execute callback with two arguments, `err`, and `key`
+       * `key` should uniquely identify the queued request
+   * `unqueue(function)`
+     * remove a request from the queue
+     * execute callback with `req` argument
+       * `req` should be the unqueued request
+ * install the module in the application `node_modules` directory and name
+   the module by taking the driver name and prefixing it with `http-later-`
+
+##### Example Storage Driver
+```js
+var LaterStorage = require("http-later").LaterStorage,
+    randomBytes = require("crypto").randomBytes.bind(null, 16);
+
+/**
+ * 'array' storage driver
+ * @constructor
+ */
+function ArrayStorage() {
+    this.data = [];
+
+    LaterStorage.call(this, function(req, done) {
+        var key = randomBytes().toString("hex");
+        
+    }, function(done) {
+    });
+}
+
+ArrayStorage.prototype = Object.create(LaterStorage.prototype);
+ArrayStorage.prototype.constructor = ArrayStorage;

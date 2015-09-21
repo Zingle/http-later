@@ -73,31 +73,35 @@ applied to filter requests based on method, path, or protocol.  By default, no
 requests will be accepted and nothing will be queued.
 
 When requests arrive, Later will check the request against filters, write
-the request to the storage provider, and return a response.  The following
-response codes may be returned.
+the request to the storage provider, and return a response.
+
+### Reponse Status Codes
 
 ##### 202 Accepted
 The request was accepted and queued for later.
 
 ##### 404 Not Found
-The request was rejected because of the URL path.
+The request was rejected because of the URL path.  The `--accept` options can
+be used to configure which URL paths are allowed.
 
 ##### 405 Method Not Allowed
-The request was rejected becasue of the HTTP method.
+The request was rejected becasue of the HTTP method.  The `--accept` option can
+be used to configure which methods are allowed.
 
 ##### 500 Internal Server Error
-Something went wrong trying to store the request.
+Something went wrong trying to record the request.
 
 ### Replay
 When replay is enabled, the request queue will be continuously scanned for new
 requests.  The requests will then passed along to their destination.
 
 ### HTTP Later Headers
-The HTTP Later server recognizes a few custom headers which can be used to
-control the replay of requests.  It preserves headers except where noted here.
+The HTTP Later server generates and recognizes a few custom headers which can
+be used to control the replay of requests.  It preserves headers except where
+noted here.
 
 ##### X-Later-Host
-Sent by client to override the Host header during replay.  The original Host \
+Sent by client to override the Host header during replay.  The original Host
 header will be sent in the X-Later-Server header.
 
 ##### X-Later-Key

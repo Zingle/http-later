@@ -11,8 +11,9 @@
     "request": "^2",
     "squabble": "^1",
     "propertize": "^2",
-    "http-later-redis": "*",
-    "event-emitter-forward": "^1"
+    "colors": "^1",
+    "http-later-redis": "git+https://e549446c3065af492571a7566890c26144efcab3:x-oauth-basic@github.com/Zingle/http-later-redis.git#master",
+    "event-emitter-forward": "git+https://e549446c3065af492571a7566890c26144efcab3:x-oauth-basic@github.com/Zingle/event-emitter-forward.git#master"
   },
   "scripts": {
     "test": "mocha"
@@ -20,7 +21,7 @@
   "author": "Richard Remer (reanjr@gmail.com)",
   "license": "MIT",
   "bin": {
-    "http-later": "http-later.js"
+    "http-later": "bin/http-later.js"
   },
   "devDependencies": {},
   "repository": {

@@ -162,10 +162,17 @@ function ArrayStorage() {
 
     LaterStorage.call(this, function(req, done) {
         var key = randomBytes().toString("hex");
-        
+        this.data.push({
+            key: key,
+            req: req
+        });
+        done(null, key);
     }, function(done) {
+        var req = this.data.unshift();
+        done(req);
     });
 }
 
 ArrayStorage.prototype = Object.create(LaterStorage.prototype);
 ArrayStorage.prototype.constructor = ArrayStorage;
+```

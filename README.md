@@ -176,3 +176,14 @@ function ArrayStorage() {
 ArrayStorage.prototype = Object.create(LaterStorage.prototype);
 ArrayStorage.prototype.constructor = ArrayStorage;
 ```
+
+###### Installing Storage Driver
+The http-later command expects to load drivers using package names beginning
+with `http-later-`.  If the driver above is named `http-later-array` and
+installed to the `node_modules` folder for http-later, the driver will be
+loaded using something like:
+
+```sh
+http-later -Sdriver:array
+```
+

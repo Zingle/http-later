@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 var squabble = require("squabble").createParser(),
     later = require(".."),
     noop = require("../lib/noop"),
@@ -101,6 +102,13 @@ server.on("request", function(res, req) {
 server.on("response", function(res, req) {
     var status = String(res.statusCode).magenta;
     console.log(status + " " + req.method + " " + req.url);
+
+    // print some additional error info for server errors
+    if (res.statusCode >= 500) {
+        console.info("-- begin error response ----------------------".magenta);
+        console.info(String(res.body).magenta);
+        console.info("---end error response ------------------------".magenta);
+    }
 });
 
 // begin replay of queued requests

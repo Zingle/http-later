@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 var squabble = require("squabble").createParser(),
+    noop = require("noopable"),
     later = require(".."),
-    noop = require("../lib/noop"),
     server, port, hosts,
     args,
     opts = {},

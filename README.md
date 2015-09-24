@@ -96,22 +96,101 @@ The HTTP Later server generates and recognizes a few custom headers which can
 be used to control the replay of requests.  It preserves headers except where
 noted here.
 
+##### X-Later-Callback
+Sent by client to have response posted to a callback URL after replay.
+
+```
+X-Later-Callback: https://example.com/receive-queued-response
+```
+
+*Example callback request*
+```
+POST /recieve-queued-response HTTP/1.1
+Host: example.com
+Content-Type: application/json
+
+{
+    "req": {
+        "httpVersion": "1.1",
+        "method": "GET",
+        "url": "/path/to/resource?with=foo",
+        "headers": {
+            "Host": "service.example.com",
+            "X-Later-Server": "queue.example.com"
+        }
+    },
+    "res": {
+        "httpVersion": "1.1",
+        "status": 200,
+        "headers": {
+            "Content-Type": "text/plain;charset=ASCII",
+            "Content-Length": "3"
+        },
+        "body": "foo"
+    }
+}
+```
+
 ##### X-Later-Host
 Sent by client to override the Host header during replay.  The original Host
 header will be sent in the X-Later-Server header.
+
+*http-later request to queue.example.com and forwarded to service.example.com*
+```
+GET /foo HTTP/1.1
+Host: queue.example.com
+X-Later-Host: service.example.com
+```
+
+*Example request passed on to service.example.com*
+```
+GET /foo HTTP/1.1
+Host: service.example.com
+X-Later-Server: queue.example.com
+```
 
 ##### X-Later-Insecure
 By default, HTTP Later will replay all requests over TLS.  The client can send
 this header (with any value) to force HTTP Later to replay the request without
 TLS.
 
+```
+X-Later-Host: public.example.com
+X-Later-Insecure: any value can go here
+```
+
 ##### X-Later-Key
 Sent to the client when a request is accepted.  It uniquely identifies the
 queued request.
 
+```
+X-Later-Key: c74c1c6bf9c9fd10247e85252bd6a012
+```
+
+##### X-Later-Retry-After
+Sent by client to indicate the earliest time a retry should be attempted.
+Expects ISO date (YYYY-MM-DDTHH:MM:SS).  Must be used in conjuntion with
+`X-Later-Retry-Attempts` (*q.v.*, for example).
+
+##### X-Later-Retry-Attempts
+Sent by client to retry the request on failure.  Sets the number of times the
+request should be retried.
+
+```
+X-Later-Retry-Attempts: 10
+X-Later-Retry-After: 2015-04-01T12:34:56
+X-Later-Retry-On: 403,503
+```
+
+##### X-Later-Retry-On
+Sent by client to retry on specified response codes.  Comma (`,`) delimited
+lists of HTTP status codes which should be retried.  Must be used in conjuntion
+with `X-Later-Retry-Attempts` (*q.v.*, for example).
+
 ##### X-Later-Server
 Sent during replay when the Host header was overwritten using the X-Later-Host
-header.  Contains the original Host header sent by the client.
+header.  Contains the original Host header sent by the client.  *q.v.*,
+`X-Later-Host` for example.
 
 ### Install
 ```sh

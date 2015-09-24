@@ -24,7 +24,6 @@ squabble.shortOpts().longOpts().stopper()
     .flag("-q", "--quiet")
     .flag("-s", "--silent")
     .flag("-r", "--replay")
-    .option("-T", "--tls-dir")
     .option("-S", "--storage");
 
 // parse global CLI args
@@ -40,19 +39,15 @@ if (args.named["--quiet"] || args.named["--silent"]) {
     if (args.named["--verbose"] > 2) console.trace.enable();
 }
 
-// set options
-if (args.named["--tls-dir"]) opts.tlsDir = args.named["--tls-dir"];
-
 // configure storage
 storage = args.named["--storage"]
     ? readOpts(args.named["--storage"])
     : {driver: "redis"};
 storage.module = "http-later-" + storage.driver;
 storage.ctor = require(storage.module);
-opts.storage = new storage.ctor(storage);
 
 // create server
-server = later.createServer(opts);
+server = later.createServer(new storage.ctor(storage));
 console.log("starting server".green);
 
 // on server error, write to console and shutdown

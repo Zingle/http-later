@@ -13,7 +13,6 @@ Usage: http-later [[-v|--verbose], ...] [-q|--quiet|-s|--silent]
   -q  --quiet               only write errors to console
   -s  --silent              do not write to console
   -S  --storage=<storespec> configure server storage
-  -T  --tls-dir=<tld-dir>   path prefix for accepted 'tls' option values
   -v  --verbose             increase amount of output; can be used multiple
                             times
 

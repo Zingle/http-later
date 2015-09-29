@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 var squabble = require("squabble").createParser(),
     noop = require("noopable"),
+    tlsfs = require("tlsfs"),
     later = require("../lib/later-server").create,
     server, hosts,
     args;
@@ -109,26 +110,18 @@ if (args.named["--replay"]) server.replay();
 
 // begin accepting and queueing requests
 args.named["--accept"].forEach(function(accept) {
-    var opts = readOpts(accept),
-        tls;
+    var opts = readOpts(accept);
 
-    // parse tls option if present
+    // with tls options, load certs, then start accepting
     if (opts.tls) {
-        tls = opts.tls.split(":");
-        if (tls.length === 1) {
-            opts.tls = {pfx: tls.shift()};
-        } else if (tls.length === 2) {
-            opts.tls = {cert: tls.shift(), key: tls.shift()};
-        } else if (tls.length === 3) {
-            opts.tls = {cert: tls.shift(), key: tls.shift(), ca: tls.shift()};
-        } else {
-            console.error(String("unrecognized 'tls' option " + opts.tls).red);
-            process.exit(1);
-        }
+        tlsfs.readCerts(opts.tls.split(":"), function(err, tlsopts) {
+            opts.tls = tlsopts;
+            server.accept(opts);
+        });
     }
 
-    // start accepting
-    server.accept(opts);
+    // otherwise, can just start accepting
+    else server.accept(opts);
 });
 
 /**

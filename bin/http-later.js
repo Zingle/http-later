@@ -59,11 +59,11 @@ server.on("error", function(err) {
 });
 
 // log info about listeners
-server.on("listening", function(httpServer) {
-    var scheme = httpServer.laterOpts.tls ? "https" : "http",
-        host = httpServer.laterOpts.host || "*",
-        path = httpServer.laterOpts.path || "/",
-        port = parseInt(httpServer.laterOpts.port),
+server.on("listening", function(host) {
+    var scheme = host.opts.tls ? "https" : "http",
+        hostname = host.opts.host || "*",
+        path = host.opts.path || "/",
+        port = parseInt(host.opts.port),
         url;
 
     if (port === 443 && scheme === "https") port = "";
@@ -71,7 +71,7 @@ server.on("listening", function(httpServer) {
     else if (port) port = ":" + port;
     else port = "";
 
-    url = scheme + "://" + host + port + path;
+    url = scheme + "://" + hostname + port + path;
     console.log(("listening on " + url).green);
 });
 

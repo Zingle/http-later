@@ -12,6 +12,7 @@
     "squabble": "^1",
     "propertize": "^2",
     "colors": "^1",
+    "async": "^1",
     "http-later-redis": "git+https://e549446c3065af492571a7566890c26144efcab3:x-oauth-basic@github.com/Zingle/http-later-redis.git#master",
     "event-emitter-forward": "git+https://e549446c3065af492571a7566890c26144efcab3:x-oauth-basic@github.com/Zingle/event-emitter-forward.git#master",
     "noopable": "git+https://e549446c3065af492571a7566890c26144efcab3:x-oauth-basic@github.com/Zingle/noopable.git#master",

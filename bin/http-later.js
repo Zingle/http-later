@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 var squabble = require("squabble").createParser(),
     noop = require("noopable"),
+    copy = require("objektify").copy,
     tlsfs = require("tlsfs"),
     later = require("../lib/later-server").create,
     server, hosts,
@@ -39,9 +40,7 @@ if (args.named["--quiet"] || args.named["--silent"]) {
 }
 
 // configure storage
-storage = args.named["--storage"]
-    ? readOpts(args.named["--storage"])
-    : {driver: "redis"};
+storage = copy({driver: "redis"}, readOpts(args.named["--storage"]));
 storage.module = "http-later-" + storage.driver;
 storage.ctor = require(storage.module);
 
@@ -132,17 +131,19 @@ args.named["--accept"].forEach(function(accept) {
 function readOpts(opts) {
     var result = {};
 
-    opts.split(",").forEach(function(opt) {
-        var parts = opt.split(":"),
-            msg;
+    (opts ? String(opts) : "").split(",")
+        .filter(function(val) {return val;})
+        .forEach(function(opt) {
+            var parts = opt.split(":"),
+                msg;
 
-        if (parts.length < 2 || !parts[0] || parts[0] in result) {
-            msg = String("invalid or unrecognized option '" + opt + "'").red;
-            console.log(msg);
-        } else {
-            result[parts[0]] = parts.slice(1).join(":");
-        }
-    });
+            if (parts.length < 2 || !parts[0] || parts[0] in result) {
+                msg = String("invalid or unrecognized option '" + opt + "'").red;
+                console.log(msg);
+            } else {
+                result[parts[0]] = parts.slice(1).join(":");
+            }
+        });
     
     return result;
 }

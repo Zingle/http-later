@@ -1,11 +1,9 @@
 #!/usr/bin/env node
 var squabble = require("squabble").createParser(),
     noop = require("noopable"),
-    later = require(".."),
-    server, port, hosts,
-    args,
-    opts = {},
-    storage = {};
+    later = require("../lib/later-server").create,
+    server, hosts,
+    args;
 
 // ensure color support enabled
 require("colors");
@@ -47,7 +45,7 @@ storage.module = "http-later-" + storage.driver;
 storage.ctor = require(storage.module);
 
 // create server
-server = later.createServer(new storage.ctor(storage));
+server = later({storage: new storage.ctor(storage)});
 console.log("starting server".green);
 
 // on server error, write to console and shutdown

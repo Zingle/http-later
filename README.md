@@ -20,11 +20,12 @@ Accepting Requests
   delimited name:value pairs.  The following names are recognized:
   
   host      host name on which to accept requests
-  port      port on which server should listen
+  forward   host name to use when replaying requests
   method    HTTP method to accept
   methods   colon-delimited list of HTTP methods to accept
   path      URL path prefix to accept; 404 for other paths
   paths     colon-delimited list of URL path prefixes to accept
+  port      port on which server should listen
   tls       paths to TLS certs:  [<pfx>|<cert>:<key>[[:<ca>], ...]]
   
   Example: http-later --accept=host:example.com,methods:GET:POST,port:8080

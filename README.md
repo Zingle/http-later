@@ -10,8 +10,8 @@ Usage: http-later [[-v|--verbose], ...] [-q|--quiet|-s|--silent]
     [-S|--storage=<storespec>]
 
   -A  --accept=<accepted>   accept requests; see accept options below
-  -q  --quiet               only write errors to console
-  -s  --silent              do not write to console
+  -q  --quiet               do not write any output
+  -s  --silent              alias for --quiet
   -S  --storage=<storespec> configure server storage
   -v  --verbose             increase amount of output; can be used multiple
                             times

@@ -12,7 +12,7 @@ require("colors");
 
 // patch console object
 console.error = noop(console.error).enable();
-console.log = noop(console.log).enable();
+console.log = noop(console.log).disable();
 console.info = noop(console.info).disable();
 console.dir = noop(console.dir).disable();
 console.trace = noop(console.trace).disable();
@@ -21,8 +21,7 @@ console.trace = noop(console.trace).disable();
 squabble.shortOpts().longOpts().stopper()
     .list("-A", "--accept")
     .count("-v", "--verbose")
-    .flag("-q", "--quiet")
-    .flag("-s", "--silent")
+    .flag("-q", "-s", "--quiet", "--silent")
     .flag("-r", "--replay")
     .option("-S", "--storage");
 
@@ -30,13 +29,13 @@ squabble.shortOpts().longOpts().stopper()
 args = squabble.parse();
 
 // configure logging
-if (args.named["--quiet"] || args.named["--silent"]) {
-    console.log.disable();
-    if (args.named["--silent"]) console.error.disable();
+if (args.named["--quiet"]) {
+    console.error.disable();
 } else {
-    if (args.named["--verbose"] > 0) console.info.enable();
+    if (args.named["--verbose"] > 0) console.log.enable();
+    if (args.named["--verbose"] > 1) console.info.enable();
     if (args.named["--verbose"] > 1) console.dir.enable();
-    if (args.named["--verbose"] > 2) console.trace.enable();
+    if (args.named["--verbose"] > 1) console.trace.enable();
 }
 
 // configure storage

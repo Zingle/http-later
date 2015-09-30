@@ -6,34 +6,43 @@ Usage
 -----
 ```
 Usage: http-later [[-v|--verbose], ...] [-q|--quiet|-s|--silent]
-    [[-A|--accept=<acceptspec>]] [-r|--replay] [-T|--tls-dir=<tls-dir>]
-    [-S|--storage=<storespec>]
+    [[-A|--accept=<aspec>]] [-S|--storage=<sspec>] [-r|--replay]
 
-  -A  --accept=<accepted>   accept requests; see accept options below
-  -q  --quiet               do not write any output
-  -s  --silent              alias for --quiet
-  -S  --storage=<storespec> configure server storage
-  -v  --verbose             increase amount of output; can be used multiple
-                            times
+  -A  --accept=<aspec>  accept requests; see Accepting Requests below
+  -q  --quiet           do not write any output
+  -s  --silent          alias for --quiet
+  -S  --storage=<sspec> configure server storage; see Storage below
+  -v  --verbose         increase output; use multiple times for more output
 
-acceptspec details
-  The --accepted option expects a comma-delimited string of colon-delimited
-  name:value pairs.  The following names are recognized:
-
-  host      host name to listen on
-  port      listen port; TLS defaults to 443, otherwise defaults to 80
-  method    HTTP method to allowed
-  methods   colon-delimited HTTP methods allowed
-  path      path prefix; 404 for paths which do not begin with prefix
-  paths     colon-delimited path prefixes accepted
-  tls       paths to TLS certs: [<pfx>|<cert>:<key>[:<ca>]]
-
-storespec details
-  The --storage option expects a comma-delimited string of colon-delimited
-  name:value pairs.  The following names are recognized:
-
-  driver    storage driver (defaults to "redis")
-  <...>     driver specific options
+Accepting Requests
+  The --accept option adds a rule describing requests which should be accepted
+  by http-later.  The value is expected to be a comma-delimited list of colon-
+  delimited name:value pairs.  The following names are recognized:
+  
+  host      host name on which to accept requests
+  port      port on which server should listen
+  method    HTTP method to accept
+  methods   colon-delimited list of HTTP methods to accept
+  path      URL path prefix to accept; 404 for other paths
+  paths     colon-delimited list of URL path prefixes to accept
+  tls       paths to TLS certs:  [<pfx>|<cert>:<key>[[:<ca>], ...]]
+  
+  Example: http-later --accept=host:example.com,methods:GET:POST,port:8080
+  
+Storage
+  By default, http-later will try to use a local redis server for storage and
+  prefix all redis keys with "later:".  The --storage option can be used to
+  configure other storage options.  The option is expected to be a comma-
+  delimited list of colon-delimited name:value pairs.  The following name is
+  recognized:
+  
+  driver    storage driver name, appended to "http-later-" to identify package
+  
+  The default "redis" driver also recognized the following name:
+  
+  keyspace  key prefix to use for all redis keys
+  
+  Example: http-later --storage=keyspace:foo-
 ```
 
 Examples

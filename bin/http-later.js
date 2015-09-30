@@ -77,6 +77,7 @@ server.on("listening", function(host) {
 // log some other server events
 server.on("replay", function() {console.log("replaying".gray);});
 server.on("drain", function() {console.log("drained".gray);});
+server.on("refill", function() {console.log("refilling from queue".gray);});
 server.on("backoff", function() {console.log("backing off".gray);});
 
 // log responses to incoming requests
@@ -91,16 +92,20 @@ server.on("request", function(res, req) {
     console.log(status + " " + req.method + " " + req.url);
 });
 
+// log retries
+server.on("retry", function(req) {
+    console.log("err".red + " " + req.method + " " + req.url);
+});
+
 // log responses to replayed requests
 server.on("response", function(res, req) {
-    var status = String(res.statusCode).magenta;
-    console.log(status + " " + req.method + " " + req.url);
+    var status;
 
-    // print some additional error info for server errors
-    if (res.statusCode >= 500) {
-        console.info("-- begin error response ----------------------".magenta);
-        console.info(String(res.body).magenta);
-        console.info("---end error response ------------------------".magenta);
+    if (res instanceof Error) {
+        console.log("err".magenta + " " + res.message);
+    } else {
+        status = String(res.statusCode).magenta;
+        console.log(status + " " + req.method + " " + req.url);
     }
 });
 

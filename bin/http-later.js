@@ -23,7 +23,8 @@ squabble.shortOpts().longOpts().stopper()
     .count("-v", "--verbose")
     .flag("-q", "-s", "--quiet", "--silent")
     .flag("-r", "--replay")
-    .option("-S", "--storage");
+    .option("-S", "--storage")
+    .option("-T", "--tls");
 
 // parse global CLI args
 args = squabble.parse();
@@ -44,33 +45,24 @@ storage.module = "http-later-" + storage.driver;
 storage.ctor = require(storage.module);
 
 // create server
-server = later({storage: new storage.ctor(storage)});
 console.log("starting server".green);
-
-// on server error, write to console and shutdown
-server.on("error", function(err) {
-    console.error(String(err).red);
-    console.log("shutting down".green);
-    server.close(function() {
-        process.exit(1);
-    });
+server = later({
+    storage: new storage.ctor(storage),
+    tls: args.named["--tls"]
+        ? tlsfs.readCertsSync(args.named["--tls"].split(":"))
+        : null
 });
 
 // log info about listeners
-server.on("listening", function(host) {
-    var scheme = host.opts.tls ? "https" : "http",
-        hostname = host.opts.host || "*",
-        path = host.opts.path || "/",
-        port = parseInt(host.opts.port),
-        url;
+server.on("listening", function(address) {
+    var msg = "listening on " + address.address + ":" + address.port;
+    console.log(msg.green);
+});
 
-    if (port === 443 && scheme === "https") port = "";
-    else if (port === 80 && scheme === "http") port = "";
-    else if (port) port = ":" + port;
-    else port = "";
-
-    url = scheme + "://" + hostname + port + path;
-    console.log(("listening on " + url).green);
+// log info about accept rules
+server.on("accepting", function(rule) {
+    var msg = "accepting requests for " + rule;
+    console.log(msg.green);
 });
 
 // log some other server events

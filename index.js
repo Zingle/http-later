@@ -1,8 +1,8 @@
-var LaterServer = require("./lib/later-server"),
+var Later = require("./lib/later"),
     LaterStorage = require("./lib/later-storage");
 
 module.exports = {
-    LaterServer: LaterServer,
+    Later: Later,
     LaterStorage: LaterStorage,
-    createServer: LaterServer.create
+    createServer: Later.create
 };

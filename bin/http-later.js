@@ -3,7 +3,7 @@ var squabble = require("squabble").createParser(),
     noop = require("noopable"),
     copy = require("objektify").copy,
     tlsfs = require("tlsfs"),
-    later = require("../lib/later-server").create,
+    later = require("../lib/later").create,
     server, hosts,
     args;
 

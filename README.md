@@ -223,46 +223,54 @@ options object.
 The following steps should be taken to implement a new storage driver.
 
  * choose a name for the driver
- * create new class extending from LaterStorage
-   * call base LaterStorage constructor with `queue` and `unqueue` arguments
+ * add dependency for `http-later-storage`
+ * create new class using `createStorage` export from `http-later-storage`
+   * call with `queue`, `unqueue`, and `log` arguments
    * `queue(object, function)`
      * store request object in queue
      * execute callback with two arguments, `err`, and `key`
        * `key` should uniquely identify the queued request
    * `unqueue(function)`
      * remove a request from the queue
-     * execute callback with `req` argument
+     * execute callback with three arguments, `err`, `req`, and `key`
        * `req` should be the unqueued request
+       * `key` should be the original key
+   * `log(string, object, function)`
+     * log result
+     * execute callback with `err` argument
  * install the module in the application `node_modules` directory and name
    the module by taking the driver name and prefixing it with `http-later-`
 
 ##### Example Storage Driver
 ```js
-var LaterStorage = require("http-later").LaterStorage,
+var storage = require("http-later-storage"),
     randomBytes = require("crypto").randomBytes.bind(null, 16);
 
 /**
  * 'array' storage driver
  * @constructor
  */
-function ArrayStorage() {
-    this.data = [];
-
-    LaterStorage.call(this, function(req, done) {
-        var key = randomBytes().toString("hex");
-        this.data.push({
-            key: key,
-            req: req
-        });
-        done(null, key);
-    }, function(done) {
-        var req = this.data.unshift();
-        done(req);
-    });
-}
-
-ArrayStorage.prototype = Object.create(LaterStorage.prototype);
-ArrayStorage.prototype.constructor = ArrayStorage;
+var ArrayStorage = storage(
+        function(data, done) {
+            var key = randomBytes().toString("hex");
+            this.data = this.data || [];
+            this.data.push({
+                key: key,
+                data: data
+            });
+            done(null, key);
+        },
+        function(done) {
+            this.data = this.data || [];
+            var data = this.data.unshift();
+            done(null, data.data, data.key);
+        },
+        function(key, result, done) {
+            this.log = this.log || {};
+            this.log[key] = result;
+            done();
+        }
+    );
 ```
 
 ###### Installing Storage Driver

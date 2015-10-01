@@ -4,7 +4,7 @@ var squabble = require("squabble").createParser(),
     copy = require("objektify").copy,
     tlsfs = require("tlsfs"),
     later = require("../lib/later").create,
-    server, hosts,
+    server, storage,
     args;
 
 // ensure color support enabled

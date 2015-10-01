@@ -12,6 +12,8 @@ Usage: http-later [[-v|--verbose], ...] [-q|--quiet|-s|--silent]
   -q  --quiet           do not write any output
   -s  --silent          alias for --quiet
   -S  --storage=<sspec> configure server storage; see Storage below
+  -T  --tls=<certspec>  enable TLS server and set default server cert
+                        q.v., Accepting Request tls option for more info
   -v  --verbose         increase output; use multiple times for more output
 
 Accepting Requests
@@ -26,7 +28,8 @@ Accepting Requests
   path      URL path prefix to accept; 404 for other paths
   paths     colon-delimited list of URL path prefixes to accept
   port      port on which server should listen
-  tls       paths to TLS certs:  [<pfx>|<cert>:<key>[[:<ca>], ...]]
+  tls       paths to TLS certs (requires -T option); expects colon:delimited
+            file paths: [<pfx>|<cert>:<key>[[:<ca>], ...]]
   
   Example: http-later --accept=host:example.com,methods:GET:POST,port:8080
   

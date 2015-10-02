@@ -1,6 +1,6 @@
 {
   "name": "http-later",
-  "version": "0.3.18",
+  "version": "0.3.19",
   "description": "queue HTTP requests and replay them later",
   "main": "index.js",
   "dependencies": {
@@ -13,6 +13,7 @@
     "propertize": "^2",
     "colors": "^1",
     "async": "^1",
+    "concussion": "^1",
     "http-later-redis": "git+https://e549446c3065af492571a7566890c26144efcab3:x-oauth-basic@github.com/Zingle/http-later-redis.git#master",
     "event-emitter-forward": "git+https://e549446c3065af492571a7566890c26144efcab3:x-oauth-basic@github.com/Zingle/event-emitter-forward.git#master",
     "noopable": "git+https://e549446c3065af492571a7566890c26144efcab3:x-oauth-basic@github.com/Zingle/noopable.git#master",

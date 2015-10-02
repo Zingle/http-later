@@ -61,7 +61,8 @@ server.on("listening", function(address) {
 
 // log info about accept rules
 server.on("accepting", function(rule) {
-    var msg = "accepting requests for " + rule;
+    var msg = "accepting requests at " + rule;
+    if (rule.forward) msg += " for " + rule.forward;
     console.log(msg.green);
 });
 

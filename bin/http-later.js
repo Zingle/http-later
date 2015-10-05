@@ -67,13 +67,13 @@ server.on("accepting", function(rule) {
 });
 
 // log some other server events
-server.on("replay", function() {console.log("replaying".gray);});
+server.on("replaying", function() {console.log("replaying".gray);});
 server.on("drain", function() {console.log("drained".gray);});
 server.on("refill", function() {console.log("refilling from queue".gray);});
 server.on("backoff", function() {console.log("backing off".gray);});
 
-// log responses to incoming requests
-server.on("request", function(res, req) {
+// log incoming requests and their initial response
+server.on("request", function(req, res) {
     var status = res.statusCode;
 
     if (status < 200) status = String(status).yellow;
@@ -84,21 +84,39 @@ server.on("request", function(res, req) {
     console.log(status + " " + req.method + " " + req.url);
 });
 
-// log retries
-server.on("retry", function(req) {
-    console.log("err".red + " " + req.method + " " + req.url);
+// log requests pulled from queue
+server.on("pull", function(req) {
+    var method = req.method, url = req.url,
+        version = "HTTP/" + req.httpVersion,
+        message = ["pull", method, url, version].join(" ");
+
+    console.info(message.gray);
+});
+
+// log request replays
+server.on("replay", function(req) {
+    var method = req.method, url = req.url,
+        version = "HTTP/" + req.httpVersion,
+        message = ["replay", method, url, version].join(" ");
+
+    console.info(message.gray);
 });
 
 // log responses to replayed requests
 server.on("response", function(res, req) {
     var status;
+    status = String(res.statusCode).magenta;
+    console.log(status + " " + req.method + " " + req.url);
+});
 
-    if (res instanceof Error) {
-        console.log("err".magenta + " " + res.message);
-    } else {
-        status = String(res.statusCode).magenta;
-        console.log(status + " " + req.method + " " + req.url);
-    }
+// log failure during request replay
+server.on("failure", function(err, req) {
+    console.log("err".magenta + " " + err.message);
+});
+
+// log retries
+server.on("retry", function(req) {
+    console.log("err".red + " " + req.method + " " + req.url);
 });
 
 // begin replay of queued requests

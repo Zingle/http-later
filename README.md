@@ -182,8 +182,8 @@ X-Later-Insecure: any value can go here
 ```
 
 ##### X-Later-Key
-Sent to the client when a request is accepted.  It uniquely identifies the
-queued request.
+Sent in response to client when a request is accepted to uniquely identify the
+queued request.  Sent to destination during replay as a reference.
 
 ```
 X-Later-Key: c74c1c6bf9c9fd10247e85252bd6a012

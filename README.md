@@ -171,16 +171,6 @@ Host: service.example.com
 X-Later-Server: queue.example.com
 ```
 
-##### X-Later-Insecure
-By default, HTTP Later will replay all requests over TLS.  The client can send
-this header (with any value) to force HTTP Later to replay the request without
-TLS.
-
-```
-X-Later-Host: public.example.com
-X-Later-Insecure: any value can go here
-```
-
 ##### X-Later-Key
 Sent in response to client when a request is accepted to uniquely identify the
 queued request.  Sent to destination during replay as a reference.
@@ -203,6 +193,17 @@ with `X-Later-Attempts` (*q.v.*, for example).
 Sent during replay when the Host header was overwritten using the X-Later-Host
 header.  Contains the original Host header sent by the client.  *q.v.*,
 `X-Later-Host` for example.
+
+##### X-Later-TLS
+By default, HTTP Later will replay requests over TLS if the incoming request
+comes over TLS.  The client can send this header to force HTTP Later to replay
+the request over TLS with a value of "secure" and no-TLS with a values of
+"insecure".
+
+```
+X-Later-Host: public.example.com
+X-Later-Secure: insecure
+```
 
 ### Install
 ```sh

@@ -108,6 +108,16 @@ The HTTP Later server generates and recognizes a few custom headers which can
 be used to control the replay of requests.  It preserves headers except where
 noted here.
 
+##### X-Later-Attempts
+Sent by client to retry the request on failure.  Sets the number of times the
+request should be tried.  Defaults to 1.
+
+```
+X-Later-Attempts: 10
+X-Later-Retry-After: 2015-04-01T12:34:56
+X-Later-Retry-On: 403,503
+```
+
 ##### X-Later-Callback
 Sent by client to have response posted to a callback URL after replay.
 
@@ -182,22 +192,12 @@ X-Later-Key: c74c1c6bf9c9fd10247e85252bd6a012
 ##### X-Later-Retry-After
 Sent by client to indicate the earliest time a retry should be attempted.
 Expects ISO date (YYYY-MM-DDTHH:MM:SS).  Must be used in conjuntion with
-`X-Later-Retry-Attempts` (*q.v.*, for example).
-
-##### X-Later-Retry-Attempts
-Sent by client to retry the request on failure.  Sets the number of times the
-request should be retried.
-
-```
-X-Later-Retry-Attempts: 10
-X-Later-Retry-After: 2015-04-01T12:34:56
-X-Later-Retry-On: 403,503
-```
+`X-Later-Attempts` (*q.v.*, for example).
 
 ##### X-Later-Retry-On
 Sent by client to retry on specified response codes.  Comma (`,`) delimited
 lists of HTTP status codes which should be retried.  Must be used in conjuntion
-with `X-Later-Retry-Attempts` (*q.v.*, for example).
+with `X-Later-Attempts` (*q.v.*, for example).
 
 ##### X-Later-Server
 Sent during replay when the Host header was overwritten using the X-Later-Host

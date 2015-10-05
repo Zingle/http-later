@@ -213,7 +213,9 @@ npm install -g
 
 ### Replay
 When replay is enabled, the request queue will be continuously scanned for new
-requests.  The requests will then passed along to their destination.
+requests.  The requests will then passed along to their destination.  Requests
+which fail to connect will be retried for about 5 minutes and then fail.  This
+failure may then trigger a retry if there are attempts left.
 
 ### Storage
 Storage can be customized by writing new storage drivers.  The default storage

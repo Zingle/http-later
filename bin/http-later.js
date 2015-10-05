@@ -4,6 +4,7 @@ var squabble = require("squabble").createParser(),
     copy = require("objektify").copy,
     tlsfs = require("tlsfs"),
     later = require("../lib/later").create,
+    format = require("../lib/format"),
     server, storage,
     args;
 
@@ -81,32 +82,24 @@ server.on("request", function(req, res) {
     else if (status < 500) status = String(status).yellow;
     else status = String(status).red;
 
-    console.log(status + " " + req.method + " " + req.url);
+    console.log(status + " " + format.request(req));
 });
 
 // log requests pulled from queue
 server.on("pull", function(req) {
-    var method = req.method, url = req.url,
-        version = "HTTP/" + req.httpVersion,
-        message = ["pull", method, url, version].join(" ");
-
-    console.info(message.gray);
+    console.info(("pull " + format.request(req)).gray);
 });
 
 // log request replays
 server.on("replay", function(req) {
-    var method = req.method, url = req.url,
-        version = "HTTP/" + req.httpVersion,
-        message = ["replay", method, url, version].join(" ");
-
-    console.info(message.gray);
+    console.info(("play " + format.request(req)).gray);
 });
 
 // log responses to replayed requests
 server.on("response", function(res, req) {
     var status;
     status = String(res.statusCode).magenta;
-    console.log(status + " " + req.method + " " + req.url);
+    console.log(status + " " + format.request(req));
 });
 
 // log failure during request replay
@@ -116,7 +109,7 @@ server.on("failure", function(err, req) {
 
 // log retries
 server.on("retry", function(req) {
-    console.log("err".red + " " + req.method + " " + req.url);
+    console.log("err".red + " " + format.request(req));
 });
 
 // begin replay of queued requests

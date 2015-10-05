@@ -104,12 +104,15 @@ server.on("response", function(res, req) {
 
 // log failure during request replay
 server.on("failure", function(err, req) {
-    console.log("err".magenta + " " + err.message);
+    var errmsg = err.message ? (" ! " + err.message).red : "";
+    console.log("err".magenta + " " + format.request(req) + errmsg);
 });
 
 // log retries
-server.on("retry", function(req) {
-    console.log("err".red + " " + format.request(req));
+server.on("retry", function(req, res) {
+    var code = res.statusCode ? String(res.statusCode) : "err",
+        err = res.message ? (" ! " + res.message).red : "";
+    console.log(code.red + " " + format.request(req) + err);
 });
 
 // begin replay of queued requests

@@ -4,7 +4,7 @@ var squabble = require("squabble").createParser(),
     copy = require("objektify").copy,
     tlsfs = require("tlsfs"),
     later = require("../lib/later").create,
-    format = require("../lib/format"),
+    requtil = require("../lib/request-util"),
     server, storage,
     args;
 
@@ -82,37 +82,37 @@ server.on("request", function(req, res) {
     else if (status < 500) status = String(status).yellow;
     else status = String(status).red;
 
-    console.log(status + " " + format.request(req));
+    console.log(status + " " + requtil.formatLog(req));
 });
 
 // log requests pulled from queue
 server.on("pull", function(req) {
-    console.info(("pull " + format.request(req)).gray);
+    console.info(("pull " + requtil.formatLog(req)).gray);
 });
 
 // log request replays
 server.on("replay", function(req) {
-    console.info(("play " + format.request(req)).gray);
+    console.info(("play " + requtil.formatLog(req)).gray);
 });
 
 // log responses to replayed requests
 server.on("response", function(res, req) {
     var status;
     status = String(res.statusCode).magenta;
-    console.log(status + " " + format.request(req));
+    console.log(status + " " + requtil.formatLog(req));
 });
 
 // log failure during request replay
 server.on("failure", function(err, req) {
     var errmsg = err.message ? (" ! " + err.message).red : "";
-    console.log("err".magenta + " " + format.request(req) + errmsg);
+    console.log("err".magenta + " " + requtil.formatLog(req) + errmsg);
 });
 
 // log retries
 server.on("retry", function(req, res) {
     var code = res.statusCode ? String(res.statusCode) : "err",
         err = res.message ? (" ! " + res.message).red : "";
-    console.log(code.red + " " + format.request(req) + err);
+    console.log(code.red + " " + requtil.formatLog(req) + err);
 });
 
 // begin replay of queued requests

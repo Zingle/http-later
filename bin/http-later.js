@@ -71,7 +71,7 @@ server.on("accepting", function(rule) {
 server.on("replaying", function() {console.log("replaying".gray);});
 server.on("drain", function() {console.log("drained".gray);});
 server.on("refill", function() {console.log("refilling from queue".gray);});
-server.on("backoff", function() {console.log("backing off".gray);});
+server.on("backoff", function(ms) {console.log(("backing off "+ms).gray);});
 
 // log incoming requests and their initial response
 server.on("request", function(req, res) {
@@ -88,6 +88,11 @@ server.on("request", function(req, res) {
 // log requests pulled from queue
 server.on("pull", function(req) {
     console.info(("pull " + requtil.formatLog(req)).gray);
+});
+
+// log delayed requests
+server.on("wait", function(req) {
+    console.info(("wait " + requtil.formatLog(req)).gray);
 });
 
 // log request replays

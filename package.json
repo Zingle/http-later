@@ -1,6 +1,6 @@
 {
   "name": "http-later",
-  "version": "0.3.22",
+  "version": "1.0.0",
   "description": "queue HTTP requests and replay them later",
   "main": "index.js",
   "dependencies": {

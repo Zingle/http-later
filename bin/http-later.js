@@ -81,10 +81,10 @@ server.on("request", function(req, res) {
     var status = res.statusCode;
 
     if (status < 200) status = String(status).yellow;
-    else if (status = 200) status = String(status).green;
-    else if (status = 202) status = String(status).green;
-    else if (status < 300) status = String(status).cyan;
-    else if (status < 500) status = String(status).yellow;
+    else if (status == 200) status = String(status).green;
+    else if (status == 202) status = String(status).green;
+    else if (status <  300) status = String(status).cyan;
+    else if (status <  500) status = String(status).yellow;
     else status = String(status).red;
 
     console.log(status + " " + requtil.formatLog(req));

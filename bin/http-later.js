@@ -68,42 +68,50 @@ server.on("accepting", function(rule) {
 });
 
 // log some other server events
-server.on("replaying", function() {console.log("replaying".gray);});
-server.on("drain", function() {console.log("drained".gray);});
-server.on("refill", function() {console.log("refilling from queue".gray);});
-server.on("backoff", function(ms) {console.log(("backing off "+ms).gray);});
+if (args.named["--verbose"] > 2) {
+    server.on("replaying", function() {console.log("replaying".gray);});
+    server.on("drain", function()     {console.log("drained".gray);});
+    server.on("refill", function()    {console.log("refilling from queue".gray);});
+    server.on("backoff", function(ms) {console.log(("backing off "+ms).gray);});
+}
+server.on("error", function() {console.log("redis gone.".red);});
 
 // log incoming requests and their initial response
 server.on("request", function(req, res) {
     var status = res.statusCode;
 
     if (status < 200) status = String(status).yellow;
-    else if (status < 300) status = String(status).cyan;
-    else if (status < 500) status = String(status).yellow;
+    else if (status == 200) status = String(status).green;
+    else if (status == 202) status = String(status).green;
+    else if (status <  300) status = String(status).cyan;
+    else if (status <  500) status = String(status).yellow;
     else status = String(status).red;
 
     console.log(status + " " + requtil.formatLog(req));
 });
 
 // log requests pulled from queue
-server.on("pull", function(req) {
-    console.info(("pull " + requtil.formatLog(req)).gray);
-});
+if (args.named["--verbose"] > 1) {
+    server.on("pull", function(req) {
+        console.log(("pull " + requtil.formatLog(req)).gray);
+    });
 
-// log delayed requests
-server.on("wait", function(req) {
-    console.info(("wait " + requtil.formatLog(req)).gray);
-});
+    // log delayed requests
+    server.on("wait", function(req) {
+        console.log(("wait " + requtil.formatLog(req)).gray);
+    });
 
-// log request replays
-server.on("replay", function(req) {
-    console.info(("play " + requtil.formatLog(req)).gray);
-});
+    // log request replays
+    server.on("replay", function(req) {
+        console.log(("play " + requtil.formatLog(req)).gray);
+    });
+}
 
 // log responses to replayed requests
 server.on("response", function(res, req) {
     var status;
-    status = String(res.statusCode).magenta;
+    if (res.statusCode == 200) status = String(res.statusCode).green
+    else status = String(res.statusCode).magenta;
     console.log(status + " " + requtil.formatLog(req));
 });
 
@@ -155,12 +163,11 @@ function readOpts(opts) {
 
             if (parts.length < 2 || !parts[0] || parts[0] in result) {
                 msg = String("invalid or unrecognized option '" + opt + "'").red;
-                console.log(msg);
+                console.error(msg);
             } else {
                 result[parts[0]] = parts.slice(1).join(":");
             }
         });
-    
+
     return result;
 }
-

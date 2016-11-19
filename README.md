@@ -45,6 +45,11 @@ Storage
   The default "redis" driver also recognized the following name:
   
   keyspace  key prefix to use for all redis keys
+  and Redis parameters like:
+  host                   redis server hostname                  (default: 127.0.0.1)
+  port                   redis server port                      (default: 6379)
+  path                   redis server unix_path to socket       (default: null)
+  url                    redis server URL                       (default: null)
   
   Example: http-later --storage=keyspace:foo-
 ```

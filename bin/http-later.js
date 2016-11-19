@@ -110,7 +110,7 @@ if (args.named["--verbose"] > 1) {
 // log responses to replayed requests
 server.on("response", function(res, req) {
     var status;
-    if (res.statusCode = 200) status = String(res.statusCode).green
+    if (res.statusCode == 200) status = String(res.statusCode).green
     else status = String(res.statusCode).magenta;
     console.log(status + " " + requtil.formatLog(req));
 });

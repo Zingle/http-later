@@ -24,6 +24,7 @@ squabble.shortOpts().longOpts().stopper()
     .count("-v", "--verbose")
     .flag("-q", "-s", "--quiet", "--silent")
     .flag("-r", "--replay")
+    .flag("-F", "--httpsonly")
     .option("-S", "--storage")
     .option("-T", "--tls");
 
@@ -64,6 +65,7 @@ server.on("listening", function(address) {
 server.on("accepting", function(rule) {
     var msg = "accepting requests at " + rule;
     if (rule.forward) msg += " for " + rule.forward;
+    if (rule.httpsonly) msg += " forcing https scheme.";
     console.log(msg.green);
 });
 
@@ -135,6 +137,7 @@ if (args.named["--replay"]) server.replay();
 args.named["--accept"].forEach(function(accept) {
     var opts = readOpts(accept);
 
+    if (args.named["--httpsonly"]) opts.httpsonly = true;
     // with tls options, load certs, then start accepting
     if (opts.tls) {
         tlsfs.readCerts(opts.tls.split(":"), function(err, tlsopts) {
@@ -154,6 +157,7 @@ args.named["--accept"].forEach(function(accept) {
  */
 function readOpts(opts) {
     var result = {};
+    var flags = { httpsonly: 'true' };
 
     (opts ? String(opts) : "").split(",")
         .filter(function(val) {return val;})
@@ -161,7 +165,9 @@ function readOpts(opts) {
             var parts = opt.split(":"),
                 msg;
 
-            if (parts.length < 2 || !parts[0] || parts[0] in result) {
+            if (parts.length == 1 && parts[0] in flags) {
+                result[parts[0]] = true;
+            } else if (parts.length < 2 || !parts[0] || parts[0] in result) {
                 msg = String("invalid or unrecognized option '" + opt + "'").red;
                 console.error(msg);
             } else {

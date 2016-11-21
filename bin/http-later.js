@@ -11,6 +11,9 @@ var squabble = require("squabble").createParser(),
 // ensure color support enabled
 require("colors");
 
+// add timestamps in front of log messages
+require("console-stamp")(console, "HH:mm:ss.l");
+
 // patch console object
 console.error = noop(console.error).enable();
 console.log = noop(console.log).disable();

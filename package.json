@@ -12,6 +12,7 @@
     "squabble": "^1",
     "propertize": "^2",
     "colors": "^1",
+    "console-stamp": "^0.2",
     "async": "^1",
     "concussion": "^1",
     "http-later-redis": "^1",

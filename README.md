@@ -39,7 +39,7 @@ Storage
   By default, http-later will try to use a local redis server for storage and
   prefix all redis keys with "later:".  The --storage option can be used to
   configure other storage options.  The option is expected to be a comma-
-  delimited list of colon-delimited name:value pairs.  The following name is
+  delimited list of colon-delimited name:value pairs.  The following names are
   recognized:
   
   driver    storage driver name, appended to "http-later-" to identify package

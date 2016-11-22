@@ -79,7 +79,12 @@ if (args.named["--verbose"] > 2) {
     server.on("refill", function()    {console.log("refilling from queue".gray);});
     server.on("backoff", function(ms) {console.log(("backing off "+ms).gray);});
 }
-server.on("error", function() {console.log("redis gone.".red);});
+
+// dump errors to console
+server.on("error", function(err) {
+    var msg = args.named["--verbose"] ? err.stack : err.message;
+    console.error(msg.red);
+);
 
 // log incoming requests and their initial response
 server.on("request", function(req, res) {

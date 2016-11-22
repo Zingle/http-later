@@ -31,7 +31,7 @@ Accepting Requests
   port      port on which server should listen
   tls       paths to TLS certs (requires -T options); expects colon-delimited
             file paths: [<pfx>|<cert>:<key>[[:<ca>], ...]]
-  httpsonly fore https security on incoming insecure requests (flag)
+  httpsonly force https security on incoming insecure requests (flag)
   
   Example: http-later --accept=host:example.com,methods:GET:POST,port:8080
   

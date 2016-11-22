@@ -14,7 +14,7 @@ Usage: http-later [[-v|--verbose], ...] [-q|--quiet|-s|--silent]
   -S  --storage=<sspec> configure server storage; see Storage below
   -T  --tls=<certspec>  enable TLS server and set default server cert
                         q.v., Accepting Request tls option for more info
-  -F  --httpsonly       fore https security on incoming insecure requests for all accept queues
+  -F  --httpsonly       force https security on incoming insecure requests for all accept queues
   -v  --verbose         increase output; use multiple times for more output
 
 Accepting Requests
